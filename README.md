@@ -1,5 +1,5 @@
 
-# Convolution Neural Networks
+# Convolutional Neural Networks
 
 ## Introduction   
 
@@ -19,6 +19,8 @@ Because of these properties, CNNs are great for tasks like:
 - Picture neural style transfer
 
 ## Objectives
+
+You will be able to:
 
 * Describe what a CNN is
 * Describe the basic architectural features of a CNN
