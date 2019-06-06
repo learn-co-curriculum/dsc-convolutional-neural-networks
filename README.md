@@ -30,13 +30,13 @@ You will be able to:
 
 Building a CNN in Keras is very similar to the previous neural networks that we have built to date. To start, you will initialize a sequential model as before and go on adding layers. However, rather then simply adding additional dense layers or dropouts between them, we will now start to investigate other potential layer architectures including convolutional layers.
 
-<img src="architecture-cnn.png">
+<img src="images/architecture-cnn.png">
 
 ## The Convolution Operation 
 
 The idea behind the convolutional operation is to detect complex building blocks, or features, that can aid in the larger task such as image recognition. For example, we'll detect vertical or horizontal edges present in the image. Let's look at what horizontal edge detection would look like!
 
-![title](conv.png)
+![title](images/conv.png)
 
 This is a simplified 5 x 5 pixel image (greyscale!). You use a so-called "filter" (denoted on the right) to perform a convolution operation. This particular filter operation will detect horizontal edges. The matrix in the left should have number in it (from 1-255, or let's assume we rescaled it to number 1-10). The output is a 3 x 3 matrix. (*This example is for computational clarity, no clear edges*)
 
@@ -44,7 +44,7 @@ This is a simplified 5 x 5 pixel image (greyscale!). You use a so-called "filter
 In Keras, function for the convolution step is `Conv2D`.
 
 The convolutional operation applies this filter (typically 3x3 or 5x5) to each possible 3x3 or 5x5 region of the original image. The graphic below demonstrates this process. Later, 
-<img src="convolution-layer-a.png">
+<img src="images/convolution-layer-a.png">
 
 ## Padding
 
@@ -59,10 +59,10 @@ There are some issues with using filters on images including:
 
 For example, if we apply 3x3 filters to a 5x5 image, our original 5x5 image contains 25 pixels, but tiling our 3x3 filter only has 9 possible locations. Here's the 4 of the 9 possible locations for the 3x3 filter on a 5x5 image:  
 
-<img src="5by5_3by3_1.jpeg" width=200>
-<img src="5by5_3by3_2.jpeg" width=200>
-<img src="5by5_3by3_3.jpeg" width=200>
-<img src="5by5_3by3_4.jpeg" width=200>
+<img src="images/5by5_3by3_1.jpeg" width=200>
+<img src="images/5by5_3by3_2.jpeg" width=200>
+<img src="images/5by5_3by3_3.jpeg" width=200>
+<img src="images/5by5_3by3_4.jpeg" width=200>
 
 Fortunately, padding solves both of these problems! Just one layer of pixels around the edges preserves the image size when having a 3 x 3 filter. We can also use bigger filters, but generally the dimensions are odd!
 
