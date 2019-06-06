@@ -3,14 +3,15 @@
 
 ## Introduction   
 
-Convolutional Neural Networks (CNNs), can deal better with large images. Until now, images that we have used were fairly small. Imagine an color image with 500 x 500 pixels, this means you would    end up having 500 x 500 x 3 = 750,000 input features, $(x_1,...,x_{750,000})$. Next, imagine having 2000 hidden units in the first hidden layer. Then the matrix $w^{[1]}$ would have dimensions (2000 x 750,000), and will have 1.5 billion parameters. So it becomes a very high-dimensional problem!
+Convolutional Neural Networks (CNNs), build upon the fully connected neural networks you've seen to date. Since detailed images can have an incredibly high dimension based on the number of pixels, CNNs provide an alternative formulation for analyzing groups of pixels. Without the convolutional operation, fitting neural networks to medium to large images would be infeasible for all but the most powerful computers. For example, given a color image with 500 x 500 pixels, you would have 500 x 500 x 3 = 750,000 input features, $(x_1,...,x_{750,000})$. 
+From there, even having 2000 hidden units (3% of the input), in the first hidden layer, would result in roughly 1.5 billion parameters!
 
 CNNs have certain features that identify patterns in images because of  "convolution operation" including:
 
 - Dense layers learn global patterns in their input feature space
 
 - Convolution layers learn local patterns, and this leads to the following interesting features:
-    - Unlike with densely connected networks, when a convolutional neural network recognizes a patterns let's say, in the upper-right corner of a picture, it can recognize it anywhere else in a picture. 
+    - Unlike with densely connected networks, when a convolutional neural network recognizes a pattern in one region, these insights can be shared and applied to other regions.
     - Deeper convolutional neural networks can learn spatial hierarchies. A first layer will learn small local patterns, a second layer will learn larger patterns using features of the first layer patterns, etc. 
      
 Because of these properties, CNNs are great for tasks like:
@@ -28,7 +29,7 @@ You will be able to:
 
 ## Building CNNs in Keras
 
-Building a CNN in Keras is very similar to the previous neural networks that we have built to date. To start, you will initialize a sequential model as before and go on adding layers. However, rather then simply adding additional dense layers or dropouts between them, we will now start to investigate other potential layer architectures including convolutional layers.
+Building a CNN in Keras is very similar to the previous neural networks that you've built to date. To start, you will initialize a sequential model as before and go on adding layers. However, rather then simply adding additional dense layers or dropouts between them, we will now start to investigate other potential layer architectures including convolutional layers.
 
 <img src="images/architecture-cnn.png">
 
@@ -57,7 +58,7 @@ There are some issues with using filters on images including:
 - The pixels around the edges are used much less in the outputs due to the filter.  
 
 
-For example, if we apply 3x3 filters to a 5x5 image, our original 5x5 image contains 25 pixels, but tiling our 3x3 filter only has 9 possible locations. Here's the 4 of the 9 possible locations for the 3x3 filter on a 5x5 image:  
+For example, if you apply 3x3 filters to a 5x5 image, the original 5x5 image contains 25 pixels, but tiling the 3x3 filter only has 9 possible locations. Here's the 4 of the 9 possible locations for the 3x3 filter on a 5x5 image:  
 
 <img src="images/5by5_3by3_1.jpeg" width=200>
 <img src="images/5by5_3by3_2.jpeg" width=200>
@@ -81,17 +82,16 @@ Strided convolutions are rarely used in practice but a good feature to be aware 
 
 ## Convolutions on RGB images
 
-Instead of 5 x 5 grayscale, let's imagine a 7 x 7 RGB image, which boils down to having a 7 x 7 x 3 tensor. (The image itelf is compromised by a 7 by 7 matrix of pixels, each with 3 numerical values for the RGB values.) From there, you will need to use a filter that has the third dimension equal to 3 as well, let's say, 3 x 3 x 3 (a 3D "cube"). 
+Instead of 5 x 5 grayscale, imagine a 7 x 7 RGB image, which boils down to having a 7 x 7 x 3 tensor. (The image itself is compromised by a 7 by 7 matrix of pixels, each with 3 numerical values for the RGB values.) From there, you will need to use a filter that has the third dimension equal to 3 as well, let's say, 3 x 3 x 3 (a 3D "cube"). 
 
-This allows us to detect, eg only horizontal edges in the blue channel (filter on the red and green channel all equal to 0). 
+This allows you to detect, horizontal edges in the blue channel.
 
 Then, in each layer, you can convolve with several 3D filters.
-Then, you stack every output result together, and that way you end up having a 5 x 5 x (number of filters) shape.
-
+Afterwards, you stack every output result together, giving you a matrix of shape 5 x 5 x number_of_filters.
 
 If you think of it, the filter plays the same role as the w^{[1]} in our densely connected networks.
 
-The advantage is, your image can be huge, the amount of parameters you have still only depends on how many filters you're using!
+The advantage is, while your image may be huge, the amount of parameters you have still only depends on how many filters you're using!
 
 
 Imagine 20 (3 x 3 x 3) --> 20 * 27 + a bias for each filter (1* 20) = 560 parameters.
@@ -120,7 +120,7 @@ Activations: $a^{[l]}$ is of dimension $ n_h^{[l]} * n_w^{[l]} * n_c^{[l]} $
 
 ## Pooling layer
 
-    The last element in a CNN architecture (before fully connected layers as we have previously discussed in other neural networks) is the pooling layer. This layer is meant to substantially downsample the previous convolutional layers. The idea behind this is that the previous convolutional layers will find patterns such as edges or other basic shapes present in the pictures. From there, pooling layers such as Max pooling (the most common) will take a summary of the convolutions from a larger section. In practice Max pooling (taking the max of all convolutions from a larger area of the original image) works better then average pooling as we are typically looking to detect whether a feature is present in that region. Downsampling is essential in order to produce viable execution times in the model training.
+The last element in a CNN architecture (before fully connected layers as we have previously discussed in other neural networks) is the pooling layer. This layer is meant to substantially downsample the previous convolutional layers. The idea behind this is that the previous convolutional layers will find patterns such as edges or other basic shapes present in the pictures. From there, pooling layers such as Max pooling (the most common) will take a summary of the convolutions from a larger section. In practice Max pooling (taking the max of all convolutions from a larger area of the original image) works better then average pooling as we are typically looking to detect whether a feature is present in that region. Downsampling is essential in order to produce viable execution times in the model training.
 
 Max pooling has some important hyperparameters:
 - f (filter size)
@@ -131,16 +131,8 @@ If a feature is detected anywhere in the quadrants, a high number will appear. s
 
 ## Fully Connected Layers in Your CNN.
 
-Once you have addded a number of convolutional layers and pooling layers, yoiu then. will add fully connected (dense) layers as we did before in previous neural network models. This now allows the network to learn a final decision function based on these transformed informative inputs generating from the convolutional and pooling layers.
-
-## Additional Resources
-
-* https://blog.keras.io/how-convolutional-neural-networks-see-the-world.html
-* https://datascience.stackexchange.com/questions/16463/what-is-are-the-default-filters-used-by-keras-convolution2d
-* https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks
-* https://www.coursera.org/learn/convolutional-neural-networks/lecture/A9lXL/simple-convolutional-network-example
-* https://www.coursera.org/learn/convolutional-neural-networks/lecture/uRYL1/cnn-example
+Once you have added a number of convolutional layers and pooling layers, you then. will add fully connected (dense) layers as we did before in previous neural network models. This now allows the network to learn a final decision function based on these transformed informative inputs generating from the convolutional and pooling layers.
 
 ## Summary   
 
-In this lesson, we discussed the basic concepts behind CNNs including their use cases and general archictecture. In the upcoming lab, we'll begin to look at how you can build these models in Python using Keras.
+In this lesson, you learned about the basic concepts behind CNNs including their use cases and general archictecture. In the upcoming lab, you'll begin to look at how you can build these models in Python using Keras.
