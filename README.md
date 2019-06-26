@@ -135,4 +135,4 @@ Once you have added a number of convolutional layers and pooling layers, you the
 
 ## Summary   
 
-In this lesson, you learned about the basic concepts behind CNNs including their use cases and general archictecture. In the upcoming lab, you'll begin to look at how you can build these models in Python using Keras.
+In this lesson, you learned about the basic concepts behind CNNs including their use cases and general architecture. In the upcoming lab, you'll begin to look at how you can build these models in Python using Keras.
