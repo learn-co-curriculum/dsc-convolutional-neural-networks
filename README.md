@@ -45,7 +45,10 @@ This is a simplified 5 x 5 pixel image (greyscale!). You use a so-called "filter
 In Keras, function for the convolution step is `Conv2D`.
 
 The convolutional operation applies this filter (typically 3x3 or 5x5) to each possible 3x3 or 5x5 region of the original image. The graphic below demonstrates this process. Later, 
+
 <img src="images/convolution-layer-a.png">
+
+[gif courtesy of Stanford University](https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks)
 
 ## Padding
 
