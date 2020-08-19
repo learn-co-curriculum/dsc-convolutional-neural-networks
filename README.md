@@ -3,7 +3,7 @@
 
 ## Introduction   
 
-Convolutional Neural Networks (CNNs), build upon the fully connected neural networks you've seen to date. Since detailed images can have incredibly high dimensions based on the number of pixels, CNNs provide an alternative formulation for analyzing groups of pixels. Without the convolutional operation, fitting neural networks to medium to large images would be infeasible for all but the most powerful computers. For example, given a color image with 500 x 500 pixels, you would have 500 x 500 x 3 = 750,000 input features, $(x_1,...,x_{750,000})$. 
+Convolutional Neural Networks (CNNs), build upon the fully connected neural networks you've seen to date. Since detailed images can have incredibly high dimensions based on the number of pixels, CNNs provide an alternative formulation for analyzing groups of pixels. Without the convolutional operation, fitting neural networks to medium to large images would be infeasible for all but the most powerful computers. For example, given a color image with 500 x 500 pixels, you would have 500 x 500 x 3 = 750,000 input features,  <img src="https://render.githubusercontent.com/render/math?math=(x_1,...,x_{750,000})"> . 
 From there, even having 2000 hidden units (3% of the input), in the first hidden layer, would result in roughly 1.5 billion parameters!
 
 CNNs have certain features that identify patterns in images because of "convolution operation" including:
@@ -39,10 +39,9 @@ Building a CNN in Keras is very similar to the previous neural networks that you
 
 The idea behind the convolutional operation is to detect complex building blocks, or features, that can aid in the larger task such as image recognition. For example, we'll detect vertical or horizontal edges present in the image. Let's look at what horizontal edge detection would look like: 
 
-![title](images/conv.png)
+<img src="images/conv.png">
 
 This is a simplified 5 x 5 pixel image (greyscale!). You use a so-called "filter" (denoted on the right) to perform a convolution operation. This particular filter operation will detect horizontal edges. The matrix in the left should have number in it (from 1-255, or let's assume we rescaled it to number 1-10). The output is a 3 x 3 matrix. (*This example is for computational clarity, no clear edges*)
-
 
 In Keras, function for the convolution step is `Conv2D`.
 
@@ -102,24 +101,24 @@ Imagine 20 (3 x 3 x 3) --> 20 * 27 + a bias for each filter (1* 20) = 560 parame
 
 Notation:
 
-- $f^{[l]}$ = size of the filter
-- $p^{[l]}$ = padding
-- $s^{[l]}$ = amount of stride
-- $ n_c^{[l]}$ = number of filters
-- filter: $f^{[l]}$ x $f^{[l]}$ x $ n_c^{[l-1]}$
+-  <img src="https://render.githubusercontent.com/render/math?math=f^{[l]}"> = size of the filter
+-  <img src="https://render.githubusercontent.com/render/math?math=p^{[l]}"> = padding
+-  <img src="https://render.githubusercontent.com/render/math?math=s^{[l]}"> = amount of stride
+-  <img src="https://render.githubusercontent.com/render/math?math=n_c^{[l]}"> = number of filters
+- filter:  <img src="https://render.githubusercontent.com/render/math?math=f^{[l]}"> x  <img src="https://render.githubusercontent.com/render/math?math=f^{[l]}"> x  <img src="https://render.githubusercontent.com/render/math?math=n_c^{[l-1]}"> 
 
 
-- Input = $ n_h^{[l-1]} * n_w^{[l-1]} * n_c^{[l-1]} $
-- Output = $ n_h^{[l]} * n_w^{[l]} * n_c^{[l]} $
+- Input =  <img src="https://render.githubusercontent.com/render/math?math=n_h^{[l-1]} * n_w^{[l-1]} * n_c^{[l-1]} "> 
+- Output =  <img src="https://render.githubusercontent.com/render/math?math=n_h^{[l]} * n_w^{[l]} * n_c^{[l]} "> 
 
 Height and width are given by:
 
-$n_h^{[l]}= \Bigr\lfloor\dfrac{n_h^{[l-1]}+2p^{[l]}-f^{[l]}}{s^{[l]}}+1\Bigr\rfloor$
+ <img src="https://render.githubusercontent.com/render/math?math=n_h^{[l]}= \Bigr\lfloor\dfrac{n_h^{[l-1]}%2b2p^{[l]}-f^{[l]}}{s^{[l]}}%2b1\Bigr\rfloor"> 
+<br>
+ <img src="https://render.githubusercontent.com/render/math?math=n_w^{[l]}= \Bigr\lfloor\dfrac{n_w^{[l-1]}%2b2p^{[l]}-f^{[l]}}{s^{[l]}}%2b1\Bigr\rfloor"> 
 
-$n_w^{[l]}= \Bigr\lfloor\dfrac{n_w^{[l-1]}+2p^{[l]}-f^{[l]}}{s^{[l]}}+1\Bigr\rfloor$
 
-
-Activations: $a^{[l]}$ is of dimension $ n_h^{[l]} * n_w^{[l]} * n_c^{[l]} $
+Activations:  <img src="https://render.githubusercontent.com/render/math?math=a^{[l]}"> is of dimension  <img src="https://render.githubusercontent.com/render/math?math=n_h^{[l]} * n_w^{[l]} * n_c^{[l]} "> 
 
 
 ## Pooling layer
@@ -127,8 +126,8 @@ Activations: $a^{[l]}$ is of dimension $ n_h^{[l]} * n_w^{[l]} * n_c^{[l]} $
 The last element in a CNN architecture (before fully connected layers as we have previously discussed in other neural networks) is the pooling layer. This layer is meant to substantially downsample the previous convolutional layers. The idea behind this is that the previous convolutional layers will find patterns such as edges or other basic shapes present in the pictures. From there, pooling layers such as Max pooling (the most common) will take a summary of the convolutions from a larger section. In practice, Max pooling (taking the max of all convolutions from a larger area of the original image) works better than average pooling as we are typically looking to detect whether a feature is present in that region. Downsampling is essential in order to produce viable execution times in the model training.
 
 Max pooling has some important hyperparameters:
-- $f$ (filter size)
-- $S$ (stride)
+-  <img src="https://render.githubusercontent.com/render/math?math=f"> (filter size)
+-  <img src="https://render.githubusercontent.com/render/math?math=S"> (stride)
 
 Common hyperparameters include: `f=2`, `s=2` and `f=3`, `s=2`, this shrinks the size of the representations.
 If a feature is detected anywhere in the quadrants, a high number will appear, so max pooling preserves this feature.
