@@ -1,10 +1,20 @@
-
 # Convolutional Neural Networks
 
 ## Introduction   
 
 Convolutional Neural Networks (CNNs), build upon the fully connected neural networks you've seen to date. Since detailed images can have incredibly high dimensions based on the number of pixels, CNNs provide an alternative formulation for analyzing groups of pixels. Without the convolutional operation, fitting neural networks to medium to large images would be infeasible for all but the most powerful computers. For example, given a color image with 500 x 500 pixels, you would have 500 x 500 x 3 = 750,000 input features, $(x_1,...,x_{750,000})$. 
 From there, even having 2000 hidden units (3% of the input), in the first hidden layer, would result in roughly 1.5 billion parameters!
+
+## Objectives
+
+You will be able to:
+
+- Define what a convolution is, as it relates to CNNs 
+- Explain how convolutions work using RGB images 
+- Describe what a pooling layer is in a neural network 
+- Explain how padding works with convolution layers of a neural network 
+
+## CNNs
 
 CNNs have certain features that identify patterns in images because of "convolution operation" including:
 
@@ -20,35 +30,26 @@ Because of these properties, CNNs are great for tasks like:
 - Object detection in images
 - Picture neural style transfer
 
-## Objectives
-
-You will be able to:
-
-- Define what a convolution is, as it relates to CNNs 
-- Explain how convolutions work using RGB images 
-- Describe what a pooling layer is in a neural network 
-- Explain how padding works with convolution layers of a neural network 
-
 ## Building CNNs in Keras
 
 Building a CNN in Keras is very similar to the previous neural networks that you've built to date. To start, you will initialize a sequential model as before and go on adding layers. However, rather then simply adding additional dense layers or dropouts between them, we will now start to investigate other potential layer architectures including convolutional layers.
 
-<img src="images/Image_158CNN.png">
+<img src="https://raw.githubusercontent.com/learn-co-curriculum/dsc-convolutional-neural-networks/master/images/Image_158CNN.png" alt="input image, convolutions, pooling, fully connected" />
 
 ## The Convolution Operation 
 
 The idea behind the convolutional operation is to detect complex building blocks, or features, that can aid in the larger task such as image recognition. For example, we'll detect vertical or horizontal edges present in the image. Let's look at what horizontal edge detection would look like: 
 
-![title](images/conv.png)
+<img src="https://raw.githubusercontent.com/learn-co-curriculum/dsc-convolutional-neural-networks/master/images/conv.png" alt="one 5 by 5 grid, one 3 by 3 grid containing 1 1 1 0 0 0 -1 -1 -1" />
 
-This is a simplified 5 x 5 pixel image (greyscale!). You use a so-called "filter" (denoted on the right) to perform a convolution operation. This particular filter operation will detect horizontal edges. The matrix in the left should have number in it (from 1-255, or let's assume we rescaled it to number 1-10). The output is a 3 x 3 matrix. (*This example is for computational clarity, no clear edges*)
+This is a simplified 5 x 5 pixel image (grayscale!). You use a so-called "filter" (denoted on the right) to perform a convolution operation. This particular filter operation will detect horizontal edges. The matrix in the left should have number in it (from 1-255, or let's assume we rescaled it to number 1-10). The output is a 3 x 3 matrix. (*This example is for computational clarity, no clear edges*)
 
 
 In Keras, function for the convolution step is `Conv2D`.
 
 The convolutional operation applies this filter (typically 3x3 or 5x5) to each possible 3x3 or 5x5 region of the original image. The graphic below demonstrates this process.  
 
-<img src="images/convolution-layer-a.png">
+<img src="https://raw.githubusercontent.com/learn-co-curriculum/dsc-convolutional-neural-networks/master/images/convolution-layer-a.png" alt="animation of filter operation across an image to create a smaller matrix output">
 
 [gif courtesy of Stanford University](https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-convolutional-neural-networks)
 
@@ -65,10 +66,10 @@ There are some issues with using filters on images including:
 
 For example, if you apply 3x3 filters to a 5x5 image, the original 5x5 image contains 25 pixels, but tiling the 3x3 filter only has 9 possible locations. Here's the 4 of the 9 possible locations for the 3x3 filter on a 5x5 image:  
 
-<img src="images/5by5_3by3_1.jpeg" width=200>
-<img src="images/5by5_3by3_2.jpeg" width=200>
-<img src="images/5by5_3by3_3.jpeg" width=200>
-<img src="images/5by5_3by3_4.jpeg" width=200>
+<img src="https://raw.githubusercontent.com/learn-co-curriculum/dsc-convolutional-neural-networks/master/images/5by5_3by3_1.jpeg" width=200>
+<img src="https://raw.githubusercontent.com/learn-co-curriculum/dsc-convolutional-neural-networks/master/images/5by5_3by3_2.jpeg" width=200>
+<img src="https://raw.githubusercontent.com/learn-co-curriculum/dsc-convolutional-neural-networks/master/images/5by5_3by3_3.jpeg" width=200>
+<img src="https://raw.githubusercontent.com/learn-co-curriculum/dsc-convolutional-neural-networks/master/images/5by5_3by3_4.jpeg" width=200>
 
 Fortunately, padding solves both of these problems! Just one layer of pixels around the edges preserves the image size when having a 3 x 3 filter. We can also use bigger filters, but generally the dimensions are odd!
 
@@ -121,7 +122,6 @@ $n_w^{[l]}= \Bigr\lfloor\dfrac{n_w^{[l-1]}+2p^{[l]}-f^{[l]}}{s^{[l]}}+1\Bigr\rfl
 
 Activations: $a^{[l]}$ is of dimension $ n_h^{[l]} * n_w^{[l]} * n_c^{[l]} $
 
-
 ## Pooling layer
 
 The last element in a CNN architecture (before fully connected layers as we have previously discussed in other neural networks) is the pooling layer. This layer is meant to substantially downsample the previous convolutional layers. The idea behind this is that the previous convolutional layers will find patterns such as edges or other basic shapes present in the pictures. From there, pooling layers such as Max pooling (the most common) will take a summary of the convolutions from a larger section. In practice, Max pooling (taking the max of all convolutions from a larger area of the original image) works better than average pooling as we are typically looking to detect whether a feature is present in that region. Downsampling is essential in order to produce viable execution times in the model training.
@@ -131,6 +131,7 @@ Max pooling has some important hyperparameters:
 - $S$ (stride)
 
 Common hyperparameters include: `f=2`, `s=2` and `f=3`, `s=2`, this shrinks the size of the representations.
+
 If a feature is detected anywhere in the quadrants, a high number will appear, so max pooling preserves this feature.
 
 ## Fully Connected Layers in CNN
